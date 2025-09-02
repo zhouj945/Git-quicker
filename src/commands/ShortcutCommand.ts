@@ -30,15 +30,14 @@ export class ShortcutCommand {
 
       Logger.title('快捷指令列表');
       
-      // 准备表格数据
-      const headers = ['快捷键', 'Git 命令', '描述'];
-      const rows = shortcutKeys.map(key => [
-        key,
-        shortcuts[key],
-        this.getCommandDescription(shortcuts[key])
-      ]);
+      // 显示快捷指令列表
+      shortcutKeys.forEach(key => {
+        const command = shortcuts[key];
+        const description = this.getCommandDescription(command);
+        console.log(`${key} - ${command} (${description})`);
+      });
 
-      Logger.table(headers, rows);
+      Logger.separator();
       Logger.info(`共 ${shortcutKeys.length} 个快捷指令`);
     } catch (error) {
       Logger.error(`获取快捷指令失败: ${error}`);
