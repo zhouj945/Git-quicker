@@ -1,14 +1,14 @@
 # 快速开始
 
-本指南将帮助您快速上手 Quicker Git，在几分钟内掌握基本用法。
+本指南将帮助您快速上手 gIt-quicker，在几分钟内掌握基本用法。
 
 ## 第一步：初始化
 
-在开始使用之前，请确保已经 [安装](./installation.md) 了 Quicker Git。
+在开始使用之前，请确保已经 [安装](./installation.md) 了 gIt-quicker。
 
 ```bash
 # 初始化配置
-qg init
+gq init
 ```
 
 这会创建配置文件并设置默认的快捷指令。
@@ -17,10 +17,10 @@ qg init
 
 ```bash
 # 查看所有快捷指令
-qg list
+gq list
 
 # 查看帮助信息
-qg --help
+gq --help
 ```
 
 ## 基本用法示例
@@ -29,23 +29,23 @@ qg --help
 
 ```bash
 # 查看状态（相当于 git status）
-qg gst
+gq gst
 
 # 切换分支（相当于 git checkout main）
-qg gco main
+gq gco main
 
 # 添加所有文件（相当于 git add .）
-qg gaa
+gq gaa
 ```
 
 ### 2. 交互式提交
 
 ```bash
 # 启动交互式提交流程
-qg commit
+gq commit
 
 # 或使用简写
-qg c
+gq c
 ```
 
 这会引导您：
@@ -59,26 +59,26 @@ qg c
 
 ```bash
 # 查看所有分支和描述
-qg gbr
+gq gbr
 
 # 为当前分支设置描述
-qg bdesc "这是一个功能分支"
+gq bdesc "这是一个功能分支"
 
 # 为指定分支设置描述
-qg branch-desc feature/login "用户登录功能"
+gq branch-desc feature/login "用户登录功能"
 ```
 
 ### 4. 自定义快捷指令
 
 ```bash
 # 添加新的快捷指令
-qg set gps "git push --set-upstream origin"
+gq set gps "git push --set-upstream origin"
 
 # 使用新的快捷指令
-qg gps main
+gq gps main
 
 # 删除快捷指令
-qg remove gps
+gq remove gps
 ```
 
 ## 常用工作流程
@@ -87,59 +87,59 @@ qg remove gps
 
 ```bash
 # 1. 查看当前状态
-qg gst
+gq gst
 
 # 2. 切换到开发分支
-qg gco develop
+gq gco develop
 
 # 3. 拉取最新代码
-qg gpl
+gq gpl
 
 # 4. 创建功能分支
-qg create-branch
+gq create-branch
 # 按提示输入分支名和描述
 
 # 5. 开发完成后，查看更改
-qg gdiff
+gq gdiff
 
 # 6. 提交更改
-qg commit
+gq commit
 
 # 7. 推送分支
-qg gps
+gq gps
 ```
 
 ### 分支管理流程
 
 ```bash
 # 1. 查看所有分支
-qg gbr
+gq gbr
 
 # 2. 为分支添加描述
-qg bdesc "支付系统重构"
+gq bdesc "支付系统重构"
 
 # 3. 切换分支
-qg switch-branch
+gq switch-branch
 
 # 4. 删除不需要的分支
-qg bd old-feature deprecated-branch
+gq bd old-feature deprecated-branch
 ```
 
 ### 工作树管理流程
 
 ```bash
 # 1. 查看现有工作树
-qg wt -l
+gq wt -l
 
 # 2. 创建新工作树
-qg wt -a
+gq wt -a
 # 按提示选择路径和分支
 
 # 3. 切换工作树
-qg wt -w
+gq wt -w
 
 # 4. 清理无效引用
-qg wt -p
+gq wt -p
 ```
 
 ## 高级功能
@@ -148,29 +148,29 @@ qg wt -p
 
 ```bash
 # 交互式 cherry-pick
-qg cp -p
+gq cp -p
 
 # 批量 cherry-pick
-qg cp -b
+gq cp -b
 
 # 处理冲突后继续
-qg cp -c
+gq cp -c
 
 # 跳过当前提交
-qg cp -s
+gq cp -s
 
 # 取消操作
-qg cp -a
+gq cp -a
 ```
 
 ### 修改提交
 
 ```bash
 # 修改最后一次提交
-qg amend
+gq amend
 
 # 查看提交统计
-qg stats
+gq stats
 ```
 
 ## 配置管理
@@ -179,7 +179,7 @@ qg stats
 
 ```bash
 # 查看配置信息
-qg config
+gq config
 ```
 
 ### 备份和恢复
@@ -188,7 +188,7 @@ qg config
 
 ```bash
 # 卸载时会自动备份
-qg uninstall
+gq uninstall
 ```
 
 ## 实用技巧
@@ -197,7 +197,7 @@ qg uninstall
 
 ```bash
 # 快速提交流程
-qg gst && qg gaa && qg commit
+gq gst && gq gaa && gq commit
 ```
 
 ### 2. 分支描述最佳实践
@@ -205,9 +205,9 @@ qg gst && qg gaa && qg commit
 为分支添加有意义的描述：
 
 ```bash
-qg bdesc "feat: 用户认证系统 - 实现登录、注册、密码重置功能"
-qg bdesc "fix: 修复支付页面在 Safari 浏览器的显示问题"
-qg bdesc "refactor: 重构数据库连接层，提高性能和可维护性"
+gq bdesc "feat: 用户认证系统 - 实现登录、注册、密码重置功能"
+gq bdesc "fix: 修复支付页面在 Safari 浏览器的显示问题"
+gq bdesc "refactor: 重构数据库连接层，提高性能和可维护性"
 ```
 
 ### 3. 快捷指令命名规范
@@ -216,16 +216,16 @@ qg bdesc "refactor: 重构数据库连接层，提高性能和可维护性"
 
 ```bash
 # Git 原生命令的简写
-qg set gco "git checkout"
-qg set gst "git status"
-qg set gaa "git add ."
+gq set gco "git checkout"
+gq set gst "git status"
+gq set gaa "git add ."
 
 # 带参数的常用命令
-qg set gps "git push --set-upstream origin"
-qg set gpl "git pull --rebase"
+gq set gps "git push --set-upstream origin"
+gq set gpl "git pull --rebase"
 
 # 复杂的组合命令
-qg set gsync "git fetch origin && git rebase origin/main"
+gq set gsync "git fetch origin && git rebase origin/main"
 ```
 
 ### 4. 工作树使用场景
@@ -248,7 +248,7 @@ A: 快捷指令会自动备份，可以从备份文件恢复：
 ls ~/.quicker-git/backup/
 
 # 手动恢复或重新初始化
-qg init
+gq init
 ```
 
 ### Q: 提交时如何跳过 pre-commit 钩子？

@@ -1,11 +1,11 @@
 {
-  "name": "quicker-git",
+  "name": "git-quicker",
   "version": "1.0.0",
   "description": "一个简化和增强 Git 操作的 TypeScript 命令行工具，让您的 Git 工作流更加高效！",
   "main": "dist/index.js",
   "bin": {
-    "qg": "dist/cli.js",
-    "quicker-git": "dist/cli.js"
+    "gq": "dist/cli.js",
+    "git-quicker": "dist/cli.js"
   },
   "scripts": {
     "build": "tsc",

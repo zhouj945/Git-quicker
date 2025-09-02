@@ -188,7 +188,7 @@ export class CherryPickCommand {
         Logger.success('批量 cherry-pick 完成');
       } else {
         Logger.error(`批量 cherry-pick 失败: ${result.error}`);
-        Logger.info('使用 "qg cp -c" 继续，"qg cp -s" 跳过，或 "qg cp -a" 取消');
+        Logger.info('使用 "gq cp -c" 继续，"gq cp -s" 跳过，或 "gq cp -a" 取消');
       }
 
     } catch (error) {
@@ -327,9 +327,9 @@ export class CherryPickCommand {
           // 检查是否是冲突
           if (result.error && result.error.includes('conflict')) {
             Logger.warning('检测到冲突，请解决冲突后使用以下命令继续:');
-            Logger.info('  qg cp -c  # 继续');
-            Logger.info('  qg cp -s  # 跳过');
-            Logger.info('  qg cp -a  # 取消');
+            Logger.info('  gq cp -c  # 继续');
+            Logger.info('  gq cp -s  # 跳过');
+            Logger.info('  gq cp -a  # 取消');
             return;
           } else {
             // 其他错误，询问是否继续
@@ -385,9 +385,9 @@ export class CherryPickCommand {
       Logger.separator();
       Logger.info('可用操作:');
       Logger.list([
-        'qg cp -c  # 继续 cherry-pick',
-        'qg cp -s  # 跳过当前提交',
-        'qg cp -a  # 取消 cherry-pick'
+        'gq cp -c  # 继续 cherry-pick',
+        'gq cp -s  # 跳过当前提交',
+        'gq cp -a  # 取消 cherry-pick'
       ], '•');
 
     } catch (error) {

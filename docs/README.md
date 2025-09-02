@@ -1,4 +1,4 @@
-# Quicker Git 📚
+# gIt-quicker 📚
 
 一个简化和增强 Git 操作的 TypeScript 命令行工具，让您的 Git 工作流更加高效！
 
@@ -51,29 +51,29 @@
 
 ```bash
 # 初始化配置
-qg init
+gq init
 
 # 快捷指令管理
-qg list                    # 查看所有快捷指令
-qg set gco "git checkout"  # 设置快捷指令
-qg gco main               # 直接执行快捷指令
+gq list                    # 查看所有快捷指令
+gq set gco "git checkout"  # 设置快捷指令
+gq gco main               # 直接执行快捷指令
 
 # 快速提交
-qg commit                 # 交互式提交
-qg amend                  # 修改最后一次提交
+gq commit                 # 交互式提交
+gq amend                  # 修改最后一次提交
 
 # 分支管理
-qg gbr                    # 查看分支列表和描述
-qg bdesc "分支描述"        # 设置当前分支描述
-qg bd old-branch          # 删除分支
+gq gbr                    # 查看分支列表和描述
+gq bdesc "分支描述"        # 设置当前分支描述
+gq bd old-branch          # 删除分支
 
 # 工作树管理
-qg wt -l                  # 查看工作树
-qg wt -a                  # 添加工作树
+gq wt -l                  # 查看工作树
+gq wt -a                  # 添加工作树
 
 # Cherry-pick
-qg cp -p                  # 执行 cherry-pick
-qg cp -c                  # 继续 cherry-pick
+gq cp -p                  # 执行 cherry-pick
+gq cp -c                  # 继续 cherry-pick
 ```
 
 ## 🛠 系统要求
@@ -94,7 +94,7 @@ yarn global add quicker-git
 
 ## 🎯 设计理念
 
-Quicker Git 的设计遵循以下原则：
+gIt-quicker 的设计遵循以下原则：
 
 1. **简化操作** - 将复杂的 Git 操作简化为直观的命令
 2. **提高效率** - 减少重复输入，提供快捷方式

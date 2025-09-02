@@ -1,8 +1,8 @@
-# Quicker Git 🚀
+# gIt-quicker 🚀
 
 一个简化和增强 Git 操作的 TypeScript 命令行工具，让您的 Git 工作流更加高效！
 
-[![npm version](https://badge.fury.io/js/quicker-git.svg)](https://badge.fury.io/js/quicker-git)
+[![npm version](https://badge.fury.io/js/git-quicker.svg)](https://badge.fury.io/js/git-quicker)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
@@ -21,31 +21,31 @@
 
 ```bash
 # 全局安装
-npm install -g quicker-git
+npm install -g git-quicker
 
 # 或者使用 yarn
-yarn global add quicker-git
+yarn global add git-quicker
 ```
 
 ## 🚀 快速开始
 
 ```bash
 # 初始化配置并同步分支信息
-qg init
+gq init
 
 # 查看所有快捷指令
-qg list
+gq list
 
 # 设置快捷指令
-qg set gco "git checkout"
-qg set gst "git status"
+gq set gco "git checkout"
+gq set gst "git status"
 
 # 直接执行快捷指令
-qg gco main
-qg gst
+gq gco main
+gq gst
 
 # 交互式提交
-qg commit
+gq commit
 ```
 
 ## 📋 主要命令
@@ -53,18 +53,18 @@ qg commit
 ### 快捷指令管理
 
 ```bash
-qg list                    # 查看所有快捷指令
-qg set <key> <command>     # 设置快捷指令
-qg remove <key>            # 删除快捷指令
-qg <key> [args...]         # 直接执行快捷指令
+gq list                    # 查看所有快捷指令
+gq set <key> <command>     # 设置快捷指令
+gq remove <key>            # 删除快捷指令
+gq <key> [args...]         # 直接执行快捷指令
 ```
 
 ### 快速提交
 
 ```bash
-qg commit                  # 交互式提交，支持类型选择
-qg c                       # 简写形式
-qg amend                   # 修改最后一次提交
+gq commit                  # 交互式提交，支持类型选择
+gq c                       # 简写形式
+gq amend                   # 修改最后一次提交
 ```
 
 **提交流程特性：**
@@ -75,31 +75,31 @@ qg amend                   # 修改最后一次提交
 ### 分支管理
 
 ```bash
-qg gbr                     # 显示所有分支和描述（包含工作树路径）
-qg bdesc "分支描述"         # 设置当前分支描述
-qg branch-desc <branch> "描述"  # 设置指定分支描述
-qg bd <branch1> <branch2>  # 批量删除分支（带确认）
-qg create-branch           # 交互式创建分支
-qg switch-branch           # 交互式切换分支
+gq gbr                     # 显示所有分支和描述（包含工作树路径）
+gq bdesc "分支描述"         # 设置当前分支描述
+gq branch-desc <branch> "描述"  # 设置指定分支描述
+gq bd <branch1> <branch2>  # 批量删除分支（带确认）
+gq create-branch           # 交互式创建分支
+gq switch-branch           # 交互式切换分支
 ```
 
 ### 工作树管理
 
 ```bash
-qg wt -l                   # 显示所有工作树
-qg wt -a                   # 添加新工作树
-qg wt -r                   # 删除工作树
-qg wt -p                   # 清理工作树引用
+gq wt -l                   # 显示所有工作树
+gq wt -a                   # 添加新工作树
+gq wt -r                   # 删除工作树
+gq wt -p                   # 清理工作树引用
 ```
 
 ### Cherry-pick 操作
 
 ```bash
-qg cp -p                   # 执行 cherry-pick
-qg cp -c                   # 继续 cherry-pick（解决冲突后）
-qg cp -s                   # 跳过当前提交
-qg cp -a                   # 取消 cherry-pick 操作
-qg cp -b                   # 批量 cherry-pick
+gq cp -p                   # 执行 cherry-pick
+gq cp -c                   # 继续 cherry-pick（解决冲突后）
+gq cp -s                   # 跳过当前提交
+gq cp -a                   # 取消 cherry-pick 操作
+gq cp -b                   # 批量 cherry-pick
 ```
 
 ## 🎨 提交类型
@@ -148,10 +148,10 @@ qg cp -b                   # 批量 cherry-pick
 
 ```bash
 # 查看配置信息
-qg config
+gq config
 
 # 卸载工具（会备份配置）
-qg uninstall
+gq uninstall
 ```
 
 ## 📚 完整文档

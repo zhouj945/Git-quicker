@@ -40,7 +40,7 @@ class QuickerGitCLI {
    */
   private setupCommands(): void {
     this.program
-      .name('qg')
+      .name('gq')
       .description('一个简化和增强 Git 操作的 TypeScript 命令行工具')
       .version('1.0.0');
 
@@ -302,7 +302,7 @@ class QuickerGitCLI {
 
   /**
    * 设置动态快捷指令处理
-   * 允许直接执行快捷指令，如 qg gco main
+   * 允许直接执行快捷指令，如 gq gco main
    */
   private setupDynamicShortcuts(): void {
     // 动态快捷指令处理将在 run 方法中处理

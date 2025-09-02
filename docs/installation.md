@@ -1,6 +1,6 @@
 # 安装指南
 
-本文档详细介绍如何安装和配置 Quicker Git。
+本文档详细介绍如何安装和配置 gIt-quicker。
 
 ## 系统要求
 
@@ -24,18 +24,18 @@
 
 ```bash
 # 使用 npm
-npm install -g quicker-git
+npm install -g git-quicker
 
 # 使用 yarn
-yarn global add quicker-git
+yarn global add git-quicker
 ```
 
 ### 方法二：从源码安装
 
 ```bash
 # 克隆仓库
-git clone https://github.com/your-username/quicker-git.git
-cd quicker-git
+git clone https://github.com/your-username/git-quicker.git
+cd git-quicker
 
 # 安装依赖
 npm install
@@ -51,7 +51,7 @@ npm link
 
 ```bash
 # 直接运行，无需安装
-npx quicker-git --help
+npx git-quicker --help
 ```
 
 ## 验证安装
@@ -60,13 +60,13 @@ npx quicker-git --help
 
 ```bash
 # 检查版本
-qg --version
+gq --version
 
 # 查看帮助信息
-qg --help
+gq --help
 
 # 检查命令是否可用
-which qg
+which gq
 ```
 
 如果看到版本信息和帮助内容，说明安装成功。
@@ -77,21 +77,21 @@ which qg
 
 ```bash
 # 初始化配置文件和默认快捷指令
-qg init
+gq init
 ```
 
 这个命令会：
-- 创建配置目录 `~/.quicker-git/`
+- 创建配置目录 `~/.git-quicker/`
 - 生成默认的快捷指令配置
 - 初始化分支描述文件
 - 创建备份目录
 
 ## 配置文件位置
 
-Quicker Git 的配置文件存储在用户主目录下：
+gIt-quicker 的配置文件存储在用户主目录下：
 
 ```
-~/.quicker-git/
+~/.git-quicker/
 ├── shortcuts.json           # 快捷指令配置
 ├── branch-descriptions.json # 分支描述配置
 └── backup/                  # 配置备份目录
@@ -128,17 +128,17 @@ Quicker Git 的配置文件存储在用户主目录下：
 export DEBUG=1
 
 # 自定义配置目录（可选）
-export QUICKER_GIT_CONFIG_DIR="$HOME/.config/quicker-git"
+export QUICKER_GIT_CONFIG_DIR="$HOME/.config/git-quicker"
 ```
 
 ## 命令别名
 
-Quicker Git 提供两个命令别名：
+gIt-quicker 提供两个命令别名：
 
-- `qg` - 主要命令（推荐）
-- `quicker-git` - 完整命令名
+- `gq` - 主要命令（推荐）
+- `git-quicker` - 完整命令名
 
-两个命令功能完全相同，推荐使用较短的 `qg`。
+两个命令功能完全相同，推荐使用较短的 `gq`。
 
 ## 更新
 
@@ -146,35 +146,35 @@ Quicker Git 提供两个命令别名：
 
 ```bash
 # 使用 npm
-npm update -g quicker-git
+npm update -g git-quicker
 
 # 使用 yarn
-yarn global upgrade quicker-git
+yarn global upgrade git-quicker
 ```
 
 ### 检查更新
 
 ```bash
 # 检查当前版本
-qg --version
+gq --version
 
 # 检查是否有新版本
-npm outdated -g quicker-git
+npm outdated -g git-quicker
 ```
 
 ## 卸载
 
-如果需要卸载 Quicker Git：
+如果需要卸载 gIt-quicker：
 
 ```bash
 # 备份配置（可选）
-qg uninstall
+gq uninstall
 
 # 卸载包
-npm uninstall -g quicker-git
+npm uninstall -g git-quicker
 
 # 手动删除配置目录（如果需要）
-rm -rf ~/.quicker-git
+rm -rf ~/.git-quicker
 ```
 
 ## 故障排除
@@ -184,13 +184,13 @@ rm -rf ~/.quicker-git
 #### 1. 命令未找到
 
 ```bash
-qg: command not found
+gq: command not found
 ```
 
 **解决方案：**
 - 确保 Node.js 和 npm 已正确安装
 - 检查 npm 全局 bin 目录是否在 PATH 中
-- 重新安装：`npm install -g quicker-git`
+- 重新安装：`npm install -g git-quicker`
 
 #### 2. 权限错误
 
@@ -224,18 +224,18 @@ EACCES: permission denied
 
 ```bash
 # 备份现有配置
-mv ~/.quicker-git ~/.quicker-git.backup
+mv ~/.git-quicker ~/.git-quicker.backup
 
 # 重新初始化
-qg init
+gq init
 ```
 
 ### 获取帮助
 
 如果遇到其他问题：
 
-1. 查看详细帮助：`qg --help`
-2. 检查配置信息：`qg config`
+1. 查看详细帮助：`gq --help`
+2. 检查配置信息：`gq config`
 3. 查看 [常见问题](./faq.md)
 4. 提交 Issue 到 GitHub 仓库
 

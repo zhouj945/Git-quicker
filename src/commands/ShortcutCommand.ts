@@ -24,7 +24,7 @@ export class ShortcutCommand {
       const shortcutKeys = Object.keys(shortcuts);
 
       if (shortcutKeys.length === 0) {
-        Logger.warning('暂无快捷指令，使用 "qg set <key> <command>" 添加');
+        Logger.warning('暂无快捷指令，使用 "gq set <key> <command>" 添加');
         return;
       }
 
@@ -133,7 +133,7 @@ export class ShortcutCommand {
 
       if (!command) {
         Logger.error(`快捷指令 "${key}" 不存在`);
-        Logger.info('使用 "qg list" 查看所有可用的快捷指令');
+        Logger.info('使用 "gq list" 查看所有可用的快捷指令');
         return { success: false, message: `快捷指令 "${key}" 不存在` };
       }
 
@@ -171,7 +171,7 @@ export class ShortcutCommand {
       const shortcutKeys = Object.keys(shortcuts);
 
       if (shortcutKeys.length === 0) {
-        Logger.warning('暂无快捷指令，使用 "qg set <key> <command>" 添加');
+        Logger.warning('暂无快捷指令，使用 "gq set <key> <command>" 添加');
         return;
       }
 
