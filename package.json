@@ -17,9 +17,9 @@
     "prepare": "npm run build",
     "prepublishOnly": "npm run build && npm test",
     "release:prepare": "./scripts/prepare-release.sh",
-    "release:patch": "npm version patch && npm publish && git push && git push --tags",
-    "release:minor": "npm version minor && npm publish && git push && git push --tags",
-    "release:major": "npm version major && npm publish && git push && git push --tags"
+    "release:patch": "npm version patch && git push && git push --tags",
+    "release:minor": "npm version minor && git push && git push --tags",
+    "release:major": "npm version major && git push && git push --tags"
   },
   "keywords": [
     "git",
@@ -57,5 +57,9 @@
     "dist/**/*",
     "README.md",
     "LICENSE"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }
