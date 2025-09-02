@@ -2,14 +2,11 @@
   "name": "@damon945/git-quicker",
   "version": "2.0.5",
   "description": "一个简化和增强 Git 操作的 TypeScript 命令行工具，让您的 Git 工作流更加高效！",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/zhouji945/Git-quicker"
-  },
+  "repository": "https://github.com/zhouj945/Git-quicker",
   "bugs": {
-    "url": "https://github.com/zhouji945/Git-quicker/issues"
+    "url": "https://github.com/zhouj945/Git-quicker/issues"
   },
-  "homepage": "https://github.com/zhouji945/Git-quicker#readme",
+  "homepage": "https://github.com/zhouj945/Git-quicker#readme",
   "main": "dist/index.js",
   "bin": {
     "gq": "dist/cli.js",
