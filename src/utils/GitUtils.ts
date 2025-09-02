@@ -152,7 +152,7 @@ export class GitUtils {
     return new Promise((resolve) => {
       const child = spawn(command, args, {
         stdio: 'inherit', // 继承父进程的 stdio，让用户能看到输出
-        shell: true
+        shell: false // 不使用 shell，直接执行命令避免转义问题
       });
 
       child.on('close', (code) => {
