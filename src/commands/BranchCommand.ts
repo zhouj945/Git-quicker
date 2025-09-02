@@ -36,25 +36,29 @@ export class BranchCommand {
 
       Logger.title('分支列表');
 
-      // 准备表格数据
-      const headers = ['分支名', '状态', '描述', '工作树路径'];
-      const rows = branches.map(branch => {
-        const status = branch.current ? '当前' : '普通';
-        const description = descriptions[branch.name] || '-';
+      // 显示分支列表
+      branches.forEach(branch => {
+        const description = descriptions[branch.name] || '';
         
         // 查找对应的工作树路径
         const worktree = worktrees.find(wt => wt.branch === `refs/heads/${branch.name}`);
-        const worktreePath = worktree ? worktree.path : '-';
+        const worktreePath = worktree ? worktree.path : '';
 
-        return [
-          branch.current ? `* ${branch.name}` : `  ${branch.name}`,
-          status,
-          description,
-          worktreePath
-        ];
+        // 构建分支信息行
+        let branchInfo = branch.current ? `* ${branch.name}` : `  ${branch.name}`;
+        
+        if (description) {
+          branchInfo += ` - ${description}`;
+        }
+        
+        if (worktreePath && worktreePath !== process.cwd()) {
+          branchInfo += ` (工作树: ${worktreePath})`;
+        }
+
+        console.log(branchInfo);
       });
 
-      Logger.table(headers, rows);
+      Logger.separator();
       Logger.info(`共 ${branches.length} 个分支`);
 
     } catch (error) {

@@ -163,12 +163,12 @@ class QuickerGitCLI {
 
     // 设置分支描述
     this.program
-      .command('branch-desc [branch] [description...]')
+      .command('branch-desc [description...]')
       .alias('bdesc')
       .description('设置分支描述')
       .option('-b, --branch <branch>', '指定分支名')
-      .action(async (branch: string, descriptionParts: string[], options: any) => {
-        const targetBranch = options.branch || branch;
+      .action(async (descriptionParts: string[], options: any) => {
+        const targetBranch = options.branch;
         const description = descriptionParts ? descriptionParts.join(' ') : undefined;
         await this.branchCommand.setBranchDescription(targetBranch, description);
       });
