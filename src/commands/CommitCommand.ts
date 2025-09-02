@@ -30,7 +30,7 @@ export class CommitCommand {
       }
 
       // 如果有未暂存的更改，询问是否添加到暂存区
-      if (hasUncommitted && !hasStaged) {
+      if (hasUncommitted) {
         const { shouldAdd } = await inquirer.prompt([{
           type: 'confirm',
           name: 'shouldAdd',
@@ -45,22 +45,85 @@ export class CommitCommand {
             return;
           }
           Logger.success('文件已添加到暂存区');
-        } else {
-          Logger.info('操作已取消');
+        } else if (!hasStaged) {
+          // 如果用户不想添加文件且暂存区也没有文件，则退出
+          Logger.info('暂存区为空，操作已取消');
           return;
         }
       }
 
       // 选择提交类型
-      const { commitType } = await inquirer.prompt([{
-        type: 'list',
-        name: 'commitType',
-        message: '选择提交类型:',
-        choices: Object.values(CommitType).map(type => ({
-          name: `${type} - ${COMMIT_TYPE_DESCRIPTIONS[type]}`,
-          value: type
-        }))
+      let commitType: CommitType;
+      
+      // 询问是否要搜索提交类型
+      const { useSearch } = await inquirer.prompt([{
+        type: 'confirm',
+        name: 'useSearch',
+        message: '是否要搜索提交类型？',
+        default: false
       }]);
+
+      if (useSearch) {
+        // 搜索模式
+        const { searchTerm } = await inquirer.prompt([{
+          type: 'input',
+          name: 'searchTerm',
+          message: '输入搜索关键词 (类型名或描述):',
+          validate: (input: string) => {
+            if (!input.trim()) {
+              return '搜索关键词不能为空';
+            }
+            return true;
+          }
+        }]);
+
+        // 根据搜索词过滤提交类型
+        const filteredTypes = Object.values(CommitType).filter(type => 
+          type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          COMMIT_TYPE_DESCRIPTIONS[type].toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
+        if (filteredTypes.length === 0) {
+          Logger.warning(`没有找到匹配 "${searchTerm}" 的提交类型`);
+          // 显示所有类型
+          const { selectedType } = await inquirer.prompt([{
+            type: 'list',
+            name: 'selectedType',
+            message: '选择提交类型:',
+            choices: Object.values(CommitType).map(type => ({
+              name: `${type} - ${COMMIT_TYPE_DESCRIPTIONS[type]}`,
+              value: type
+            }))
+          }]);
+          commitType = selectedType;
+        } else {
+          // 显示过滤后的结果
+          Logger.success(`找到 ${filteredTypes.length} 个匹配的提交类型:`);
+          const { selectedType } = await inquirer.prompt([{
+            type: 'list',
+            name: 'selectedType',
+            message: '选择提交类型:',
+            choices: filteredTypes.map(type => ({
+              name: `${type} - ${COMMIT_TYPE_DESCRIPTIONS[type]}`,
+              value: type
+            }))
+          }]);
+          commitType = selectedType;
+        }
+      } else {
+        // 直接选择模式
+        const { selectedType } = await inquirer.prompt([{
+          type: 'list',
+          name: 'selectedType',
+          message: '选择提交类型:',
+          choices: Object.values(CommitType).map(type => ({
+            name: `${type} - ${COMMIT_TYPE_DESCRIPTIONS[type]}`,
+            value: type
+          })),
+          pageSize: 15
+        }]);
+        commitType = selectedType;
+      }
 
       // 输入提交范围（可选）
       const { scope } = await inquirer.prompt([{
@@ -99,7 +162,7 @@ export class CommitCommand {
       }]);
 
       // 构建提交消息
-      let commitMessage = commitType;
+      let commitMessage: string = commitType;
       if (scope) {
         commitMessage += `(${scope})`;
       }
