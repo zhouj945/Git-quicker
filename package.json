@@ -1,6 +1,6 @@
 {
   "name": "@damon945/git-quicker",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "一个简化和增强 Git 操作的 TypeScript 命令行工具，让您的 Git 工作流更加高效！",
   "main": "dist/index.js",
   "bin": {
