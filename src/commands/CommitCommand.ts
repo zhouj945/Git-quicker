@@ -30,6 +30,7 @@ export class CommitCommand {
       }
 
       // 如果有未暂存的更改，询问是否添加到暂存区
+
       if (hasUncommitted) {
         const { shouldAdd } = await inquirer.prompt([{
           type: 'confirm',
