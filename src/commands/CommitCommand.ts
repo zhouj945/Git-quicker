@@ -30,7 +30,6 @@ export class CommitCommand {
       }
 
       // 如果有未暂存的更改，询问是否添加到暂存区
-
       if (hasUncommitted) {
         const { shouldAdd } = await inquirer.prompt([{
           type: 'confirm',
@@ -53,60 +52,18 @@ export class CommitCommand {
         }
       }
 
-      // 直接选择提交类型（支持模糊查询）
-      const { commitTypeInput } = await inquirer.prompt([{
-        type: 'input',
-        name: 'commitTypeInput',
-        message: '输入提交类型 (可模糊搜索，如: f, fix, 修复):',
-        validate: (input: string) => {
-          if (!input.trim()) {
-            return '提交类型不能为空';
-          }
-          return true;
-        }
+      // 直接显示所有提交类型供选择
+      const { commitType } = await inquirer.prompt([{
+        type: 'list',
+        name: 'commitType',
+        message: '选择提交类型:',
+        choices: Object.values(CommitType).map(type => ({
+          name: `${type} - ${COMMIT_TYPE_DESCRIPTIONS[type]}`,
+          value: type
+        })),
+        pageSize: 15,
+        loop: false
       }]);
-
-      // 根据输入进行模糊匹配
-      const searchTerm = commitTypeInput.trim().toLowerCase();
-      const matchedTypes = Object.values(CommitType).filter(type => 
-        type.toLowerCase().includes(searchTerm) ||
-        COMMIT_TYPE_DESCRIPTIONS[type].toLowerCase().includes(searchTerm)
-      );
-
-      let commitType: CommitType;
-      
-      if (matchedTypes.length === 0) {
-        Logger.warning(`没有找到匹配 "${commitTypeInput}" 的提交类型`);
-        // 显示所有类型供选择
-        const { selectedType } = await inquirer.prompt([{
-          type: 'list',
-          name: 'selectedType',
-          message: '选择提交类型:',
-          choices: Object.values(CommitType).map(type => ({
-            name: `${type} - ${COMMIT_TYPE_DESCRIPTIONS[type]}`,
-            value: type
-          })),
-          pageSize: 15
-        }]);
-        commitType = selectedType;
-      } else if (matchedTypes.length === 1) {
-        // 只有一个匹配，直接使用
-        commitType = matchedTypes[0];
-        Logger.success(`已选择: ${commitType} - ${COMMIT_TYPE_DESCRIPTIONS[commitType]}`);
-      } else {
-        // 多个匹配，让用户选择
-        Logger.info(`找到 ${matchedTypes.length} 个匹配的提交类型:`);
-        const { selectedType } = await inquirer.prompt([{
-          type: 'list',
-          name: 'selectedType',
-          message: '选择提交类型:',
-          choices: matchedTypes.map(type => ({
-            name: `${type} - ${COMMIT_TYPE_DESCRIPTIONS[type]}`,
-            value: type
-          }))
-        }]);
-        commitType = selectedType;
-      }
 
       // 输入提交描述
       const { description } = await inquirer.prompt([{
