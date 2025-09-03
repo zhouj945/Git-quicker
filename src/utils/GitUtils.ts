@@ -146,6 +146,39 @@ export class GitUtils {
   }
 
   /**
+   * 读取 Git 分支描述（来自 git config: branch.<name>.description）
+   */
+  public static getGitBranchDescription(branchName: string): string | undefined {
+    try {
+      const output = execSync(`git config --get branch.${branchName}.description`, { encoding: 'utf-8' }).trim();
+      return output || undefined;
+    } catch {
+      return undefined;
+    }
+  }
+
+  /**
+   * 写入 Git 分支描述（等同于 git config branch.<name>.description "..."）
+   */
+  public static setGitBranchDescription(branchName: string, description: string): boolean {
+    try {
+      execSync(`git config branch.${branchName}.description ${GitUtils.escapeShellArg(description)}`, { stdio: 'ignore' });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * 转义 shell 参数，避免特殊字符导致命令错误
+   */
+  private static escapeShellArg(arg: string): string {
+    // 使用单引号包裹，并通过 '"'"' 序列处理内部单引号
+    const escaped = arg.split("'").join(`'"'"'`);
+    return `'${escaped}'`;
+  }
+
+  /**
    * 执行 Git 命令（异步，不阻塞终端）
    */
   public static executeCommandAsync(command: string, args: string[] = []): Promise<CommandResult> {

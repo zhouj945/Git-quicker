@@ -1,4 +1,5 @@
 import inquirer from 'inquirer';
+import chalk from 'chalk';
 import { ConfigManager } from '../config/ConfigManager';
 import { GitUtils } from '../utils/GitUtils';
 import { Logger } from '../utils/Logger';
@@ -28,6 +29,7 @@ export class BranchCommand {
       const branches = GitUtils.getBranches();
       const descriptions = await this.configManager.getBranchDescriptions();
       const worktrees = GitUtils.getWorktrees();
+      const currentBranchName = GitUtils.getCurrentBranch();
 
       if (branches.length === 0) {
         Logger.warning('未找到分支');
@@ -38,7 +40,9 @@ export class BranchCommand {
 
       // 显示分支列表
       branches.forEach(branch => {
-        const description = descriptions[branch.name] || '';
+        // 优先读取 git config 中的描述，其次读取本地配置文件中的描述
+        const gitDesc = GitUtils.getGitBranchDescription(branch.name);
+        const description = gitDesc || descriptions[branch.name] || '';
         
         // 查找对应的工作树路径
         const worktree = worktrees.find(wt => wt.branch === `refs/heads/${branch.name}`);
@@ -55,7 +59,12 @@ export class BranchCommand {
           branchInfo += ` (工作树: ${worktreePath})`;
         }
 
-        console.log(branchInfo);
+        // 当前分支使用亮黄色加粗显示
+        if (branch.current || branch.name === currentBranchName) {
+          console.log(chalk.yellowBright.bold(branchInfo));
+        } else {
+          console.log(branchInfo);
+        }
       });
 
       Logger.separator();
@@ -116,6 +125,13 @@ export class BranchCommand {
       }
 
       await this.configManager.setBranchDescription(targetBranch, targetDescription!);
+
+      // 同步写入到 git 配置（等同于: git config branch.<name>.description "..."）
+      const ok = GitUtils.setGitBranchDescription(targetBranch, targetDescription!);
+      if (!ok) {
+        Logger.warning('同步写入 git 配置失败，但已写入本地配置');
+      }
+
       Logger.success(`分支 "${targetBranch}" 的描述已设置: ${targetDescription}`);
 
     } catch (error) {
