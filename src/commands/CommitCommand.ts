@@ -29,27 +29,9 @@ export class CommitCommand {
         return; // 静默退出，不打印提示
       }
 
-      // 如果有未暂存的更改，询问是否添加到暂存区
-      if (hasUncommitted) {
-        const { shouldAdd } = await inquirer.prompt([{
-          type: 'confirm',
-          name: 'shouldAdd',
-          message: '检测到未暂存的更改，是否添加到暂存区？',
-          default: true
-        }]);
-
-        if (shouldAdd) {
-          const addResult = GitUtils.executeCommand('git add .');
-          if (!addResult.success) {
-            Logger.error(`添加文件到暂存区失败: ${addResult.error}`);
-            return;
-          }
-          Logger.success('文件已添加到暂存区');
-        } else if (!hasStaged) {
-          // 如果用户不想添加文件且暂存区也没有文件，则退出
-          Logger.info('暂存区为空，操作已取消');
-          return;
-        }
+      // 若没有暂存的变更则静默退出（不自动暂存、不提示）
+      if (!hasStaged) {
+        return;
       }
 
       // 直接显示所有提交类型供选择
@@ -148,13 +130,13 @@ export class CommitCommand {
           Logger.error(`修改提交消息失败: ${result.error}`);
         }
       } else {
-        // 有新的更改，询问操作方式
+        // 存在变更，询问后续操作（仅对已暂存内容生效）
         const { action } = await inquirer.prompt([{
           type: 'list',
           name: 'action',
-          message: '检测到新的更改，选择操作:',
+          message: '检测到变更，选择操作（仅对已暂存内容生效）:',
           choices: [
-            { name: '将新更改添加到最后一次提交', value: 'add' },
+            { name: '将已暂存的更改添加到最后一次提交', value: 'add' },
             { name: '只修改提交消息', value: 'message' },
             { name: '取消操作', value: 'cancel' }
           ]
@@ -166,22 +148,10 @@ export class CommitCommand {
         }
 
         if (action === 'add') {
-          // 添加未暂存的文件
-          if (hasUncommitted) {
-            const { shouldAdd } = await inquirer.prompt([{
-              type: 'confirm',
-              name: 'shouldAdd',
-              message: '是否将未暂存的更改添加到暂存区？',
-              default: true
-            }]);
-
-            if (shouldAdd) {
-              const addResult = GitUtils.executeCommand('git add .');
-              if (!addResult.success) {
-                Logger.error(`添加文件失败: ${addResult.error}`);
-                return;
-              }
-            }
+          // 仅对已暂存内容进行 amend；若没有已暂存内容则直接提示并退出
+          if (!hasStaged) {
+            Logger.info('当前没有已暂存的更改，操作已取消');
+            return;
           }
 
           // 修改提交消息（可选）
