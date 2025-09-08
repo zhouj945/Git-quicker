@@ -43,7 +43,7 @@ export class GitUtils {
         if (trimmed) {
           const isCurrent = trimmed.startsWith('*');
           // 处理 * (当前分支) 和 + (工作树分支) 的情况
-          const cleanLine = trimmed.replace(/^[\*\+]?\s+/, '');
+          const cleanLine = trimmed.replace(/^[*+]?\s+/, '');
           const parts = cleanLine.split(/\s+/);
           if (parts.length >= 2) {
             branches.push({

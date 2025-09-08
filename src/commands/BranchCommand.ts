@@ -50,9 +50,9 @@ export class BranchCommand {
 
         // 构建分支信息行
         const isCurrentBranch = branch.current || branch.name === currentBranchName;
-        let branchPrefix = isCurrentBranch ? '* ' : '  ';
-        let branchName = branch.name;
-        let descriptionPart = description ? ` - ${description}` : '';
+        const branchPrefix = isCurrentBranch ? '* ' : '  ';
+        const branchName = branch.name;
+        const descriptionPart = description ? ` - ${description}` : '';
         let worktreePart = '';
         
         if (worktreePath && worktreePath !== process.cwd()) {
