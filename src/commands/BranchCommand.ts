@@ -49,21 +49,23 @@ export class BranchCommand {
         const worktreePath = worktree ? worktree.path : '';
 
         // 构建分支信息行
-        let branchInfo = branch.current ? `* ${branch.name}` : `  ${branch.name}`;
-        
-        if (description) {
-          branchInfo += ` - ${description}`;
-        }
+        const isCurrentBranch = branch.current || branch.name === currentBranchName;
+        let branchPrefix = isCurrentBranch ? '* ' : '  ';
+        let branchName = branch.name;
+        let descriptionPart = description ? ` - ${description}` : '';
+        let worktreePart = '';
         
         if (worktreePath && worktreePath !== process.cwd()) {
-          branchInfo += ` (工作树: ${worktreePath})`;
+          worktreePart = ` (工作树: ${worktreePath})`;
         }
 
-        // 当前分支使用亮黄色加粗显示
-        if (branch.current || branch.name === currentBranchName) {
-          console.log(chalk.yellowBright.bold(branchInfo));
+        // 当前分支使用绿色显示，工作树信息不添加颜色
+        if (isCurrentBranch) {
+          // 分支名和描述使用绿色粗体，工作树信息不着色
+          const coloredPart = chalk.green.bold(`${branchPrefix}${branchName}${descriptionPart}`);
+          console.log(`${coloredPart}${worktreePart}`);
         } else {
-          console.log(branchInfo);
+          console.log(`${branchPrefix}${branchName}${descriptionPart}${worktreePart}`);
         }
       });
 
