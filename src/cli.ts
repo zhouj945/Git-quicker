@@ -276,7 +276,6 @@ class QuickerGitCLI {
           Logger.title('配置信息');
           Logger.keyValue('配置目录', configInfo.configDir);
           Logger.keyValue('快捷指令数量', configInfo.shortcutsCount.toString());
-          Logger.keyValue('分支描述数量', configInfo.branchDescriptionsCount.toString());
           
           Logger.separator();
           Logger.info('详细配置:');

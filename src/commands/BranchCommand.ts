@@ -1,6 +1,5 @@
 import inquirer from 'inquirer';
 import chalk from 'chalk';
-import { ConfigManager } from '../config/ConfigManager';
 import { GitUtils } from '../utils/GitUtils';
 import { Logger } from '../utils/Logger';
 import { BranchInfo } from '../types';
@@ -10,10 +9,8 @@ import { BranchInfo } from '../types';
  * 处理分支描述、批量删除、创建分支等操作
  */
 export class BranchCommand {
-  private configManager: ConfigManager;
-
   constructor() {
-    this.configManager = new ConfigManager();
+    // 不再需要 ConfigManager
   }
 
   /**
@@ -27,7 +24,6 @@ export class BranchCommand {
       }
 
       const branches = GitUtils.getBranches();
-      const descriptions = await this.configManager.getBranchDescriptions();
       const worktrees = GitUtils.getWorktrees();
       const currentBranchName = GitUtils.getCurrentBranch();
 
@@ -40,9 +36,8 @@ export class BranchCommand {
 
       // 显示分支列表
       branches.forEach(branch => {
-        // 优先读取 git config 中的描述，其次读取本地配置文件中的描述
-        const gitDesc = GitUtils.getGitBranchDescription(branch.name);
-        const description = gitDesc || descriptions[branch.name] || '';
+        // 读取 git config 中的描述
+        const description = GitUtils.getGitBranchDescription(branch.name) || '';
         
         // 查找对应的工作树路径
         const worktree = worktrees.find(wt => wt.branch === `refs/heads/${branch.name}`);
@@ -105,7 +100,7 @@ export class BranchCommand {
 
       // 如果没有提供描述，交互式输入
       if (!targetDescription) {
-        const currentDesc = await this.configManager.getBranchDescription(targetBranch);
+        const currentDesc = GitUtils.getGitBranchDescription(targetBranch);
         
         const { newDescription } = await inquirer.prompt([{
           type: 'input',
@@ -126,12 +121,11 @@ export class BranchCommand {
         targetDescription = newDescription.trim();
       }
 
-      await this.configManager.setBranchDescription(targetBranch, targetDescription!);
-
-      // 同步写入到 git 配置（等同于: git config branch.<name>.description "..."）
+      // 写入到 git 配置（等同于: git config branch.<name>.description "..."）
       const ok = GitUtils.setGitBranchDescription(targetBranch, targetDescription!);
       if (!ok) {
-        Logger.warning('同步写入 git 配置失败，但已写入本地配置');
+        Logger.error('写入分支描述失败');
+        return;
       }
 
       Logger.success(`分支 "${targetBranch}" 的描述已设置: ${targetDescription}`);
@@ -212,12 +206,7 @@ export class BranchCommand {
         
         if (result.success) {
           successBranches.push(branch);
-          // 删除分支描述
-          const descriptions = await this.configManager.getBranchDescriptions();
-          if (descriptions[branch]) {
-            delete descriptions[branch];
-            await this.configManager.saveBranchDescriptions(descriptions);
-          }
+          // Git 会自动清理该分支的配置信息（包括描述）
         } else {
           failedBranches.push(branch);
           Logger.error(`删除分支 "${branch}" 失败: ${result.error}`);
@@ -343,16 +332,17 @@ export class BranchCommand {
         return;
       }
 
-      const descriptions = await this.configManager.getBranchDescriptions();
-
       const { selectedBranch } = await inquirer.prompt([{
         type: 'list',
         name: 'selectedBranch',
         message: '选择要切换的分支:',
-        choices: otherBranches.map(branch => ({
-          name: `${branch.name}${descriptions[branch.name] ? ` - ${descriptions[branch.name]}` : ''}`,
-          value: branch.name
-        }))
+        choices: otherBranches.map(branch => {
+          const description = GitUtils.getGitBranchDescription(branch.name);
+          return {
+            name: `${branch.name}${description ? ` - ${description}` : ''}`,
+            value: branch.name
+          };
+        })
       }]);
 
       const result = GitUtils.executeCommand(`git checkout ${selectedBranch}`);

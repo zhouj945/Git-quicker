@@ -6,13 +6,6 @@ export interface ShortcutConfig {
 }
 
 /**
- * 分支描述配置接口
- */
-export interface BranchDescriptionConfig {
-  [branchName: string]: string;
-}
-
-/**
  * 提交类型枚举
  */
 export enum CommitType {
@@ -95,6 +88,5 @@ export interface CommandResult {
 export const CONFIG_PATHS = {
   CONFIG_DIR: '.quicker-git',
   SHORTCUTS_FILE: 'shortcuts.json',
-  BRANCH_DESC_FILE: 'branch-descriptions.json',
   BACKUP_DIR: 'backup'
 } as const;

@@ -1,23 +1,21 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
-import { ShortcutConfig, BranchDescriptionConfig, CONFIG_PATHS } from '../types';
+import { ShortcutConfig, CONFIG_PATHS } from '../types';
 
 /**
  * 配置管理器类
- * 负责管理快捷指令配置、分支描述等持久化数据
+ * 负责管理快捷指令配置等持久化数据
  */
 export class ConfigManager {
   private configDir: string;
   private shortcutsPath: string;
-  private branchDescPath: string;
   private backupDir: string;
 
   constructor() {
     // 初始化配置目录路径
     this.configDir = path.join(os.homedir(), CONFIG_PATHS.CONFIG_DIR);
     this.shortcutsPath = path.join(this.configDir, CONFIG_PATHS.SHORTCUTS_FILE);
-    this.branchDescPath = path.join(this.configDir, CONFIG_PATHS.BRANCH_DESC_FILE);
     this.backupDir = path.join(this.configDir, CONFIG_PATHS.BACKUP_DIR);
   }
 
@@ -31,9 +29,6 @@ export class ConfigManager {
       
       // 初始化默认快捷指令
       await this.initDefaultShortcuts();
-      
-      // 初始化分支描述文件
-      await this.initBranchDescriptions();
       
       console.log('✅ 配置初始化完成');
     } catch (error) {
@@ -75,15 +70,6 @@ export class ConfigManager {
 
     if (!fs.existsSync(this.shortcutsPath)) {
       await this.saveShortcuts(defaultShortcuts);
-    }
-  }
-
-  /**
-   * 初始化分支描述文件
-   */
-  private async initBranchDescriptions(): Promise<void> {
-    if (!fs.existsSync(this.branchDescPath)) {
-      await this.saveBranchDescriptions({});
     }
   }
 
@@ -141,59 +127,11 @@ export class ConfigManager {
   }
 
   /**
-   * 获取分支描述配置
-   */
-  public async getBranchDescriptions(): Promise<BranchDescriptionConfig> {
-    try {
-      if (!fs.existsSync(this.branchDescPath)) {
-        return {};
-      }
-      const content = fs.readFileSync(this.branchDescPath, 'utf-8');
-      return JSON.parse(content);
-    } catch (error) {
-      console.error('读取分支描述配置失败:', error);
-      return {};
-    }
-  }
-
-  /**
-   * 保存分支描述配置
-   */
-  public async saveBranchDescriptions(descriptions: BranchDescriptionConfig): Promise<void> {
-    try {
-      await this.ensureConfigDir();
-      // 备份现有配置
-      await this.backupConfig('branch-descriptions');
-      // 保存新配置
-      fs.writeFileSync(this.branchDescPath, JSON.stringify(descriptions, null, 2));
-    } catch (error) {
-      throw new Error(`保存分支描述配置失败: ${error}`);
-    }
-  }
-
-  /**
-   * 设置分支描述
-   */
-  public async setBranchDescription(branch: string, description: string): Promise<void> {
-    const descriptions = await this.getBranchDescriptions();
-    descriptions[branch] = description;
-    await this.saveBranchDescriptions(descriptions);
-  }
-
-  /**
-   * 获取分支描述
-   */
-  public async getBranchDescription(branch: string): Promise<string | undefined> {
-    const descriptions = await this.getBranchDescriptions();
-    return descriptions[branch];
-  }
-
-  /**
    * 备份配置文件
    */
-  private async backupConfig(type: 'shortcuts' | 'branch-descriptions'): Promise<void> {
+  private async backupConfig(type: 'shortcuts'): Promise<void> {
     try {
-      const sourceFile = type === 'shortcuts' ? this.shortcutsPath : this.branchDescPath;
+      const sourceFile = this.shortcutsPath;
       if (fs.existsSync(sourceFile)) {
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
         const backupFile = path.join(this.backupDir, `${type}-${timestamp}.json`);
@@ -210,19 +148,14 @@ export class ConfigManager {
   public async getConfigInfo(): Promise<{
     configDir: string;
     shortcutsCount: number;
-    branchDescriptionsCount: number;
     shortcuts: ShortcutConfig;
-    branchDescriptions: BranchDescriptionConfig;
   }> {
     const shortcuts = await this.getShortcuts();
-    const branchDescriptions = await this.getBranchDescriptions();
     
     return {
       configDir: this.configDir,
       shortcutsCount: Object.keys(shortcuts).length,
-      branchDescriptionsCount: Object.keys(branchDescriptions).length,
-      shortcuts,
-      branchDescriptions
+      shortcuts
     };
   }
 
@@ -233,7 +166,6 @@ export class ConfigManager {
     try {
       // 创建最终备份
       await this.backupConfig('shortcuts');
-      await this.backupConfig('branch-descriptions');
       
       console.log(`✅ 配置已备份到: ${this.backupDir}`);
       console.log('如需恢复配置，请手动复制备份文件');
