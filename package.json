@@ -1,5 +1,5 @@
 {
-  "name": "git-quicker",
+  "name": "@damon945/git-quicker",
   "version": "3.0.0",
   "type": "module",
   "description": "一个简化和增强 Git 操作的 TypeScript 命令行工具，让您的 Git 工作流更加高效！",
