@@ -29,6 +29,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify eslint installation
+        run: |
+          echo "Checking eslint installation..."
+          ls -la node_modules/.bin/ | grep eslint || echo "eslint not found in node_modules/.bin"
+          npx eslint --version || echo "npx eslint failed"
+
       - name: Lint
         run: npm run lint
 
