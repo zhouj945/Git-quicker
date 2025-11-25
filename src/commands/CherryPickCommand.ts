@@ -1,7 +1,7 @@
 import inquirer from 'inquirer';
-import { GitUtils } from '../utils/GitUtils';
-import { Logger } from '../utils/Logger';
-import { CherryPickOptions } from '../types';
+import { GitUtils } from '../utils/GitUtils.js';
+import { Logger } from '../utils/Logger.js';
+import { CherryPickOptions } from '../types/index.js';
 
 /**
  * Cherry-pick 管理命令类

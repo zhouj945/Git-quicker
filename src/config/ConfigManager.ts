@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
-import { ShortcutConfig, CONFIG_PATHS } from '../types';
+import { ShortcutConfig, CONFIG_PATHS } from '../types/index.js';
 
 /**
  * 配置管理器类

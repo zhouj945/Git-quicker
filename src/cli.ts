@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { ConfigManager } from './config/ConfigManager';
-import { ShortcutCommand } from './commands/ShortcutCommand';
-import { CommitCommand } from './commands/CommitCommand';
-import { BranchCommand } from './commands/BranchCommand';
-import { WorktreeCommand } from './commands/WorktreeCommand';
-import { CherryPickCommand } from './commands/CherryPickCommand';
-import { Logger } from './utils/Logger';
-import { GitUtils } from './utils/GitUtils';
+import { ConfigManager } from './config/ConfigManager.js';
+import { ShortcutCommand } from './commands/ShortcutCommand.js';
+import { CommitCommand } from './commands/CommitCommand.js';
+import { BranchCommand } from './commands/BranchCommand.js';
+import { WorktreeCommand } from './commands/WorktreeCommand.js';
+import { CherryPickCommand } from './commands/CherryPickCommand.js';
+import { Logger } from './utils/Logger.js';
+import { GitUtils } from './utils/GitUtils.js';
 
 /**
  * Quicker Git CLI 主程序

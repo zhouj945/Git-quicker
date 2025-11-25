@@ -1,8 +1,8 @@
 import inquirer from 'inquirer';
 import chalk from 'chalk';
-import { GitUtils } from '../utils/GitUtils';
-import { Logger } from '../utils/Logger';
-import { BranchInfo } from '../types';
+import { GitUtils } from '../utils/GitUtils.js';
+import { Logger } from '../utils/Logger.js';
+import { BranchInfo } from '../types/index.js';
 
 /**
  * 分支管理命令类

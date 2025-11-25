@@ -1,8 +1,8 @@
 import inquirer from 'inquirer';
-import { ConfigManager } from '../config/ConfigManager';
-import { GitUtils } from '../utils/GitUtils';
-import { Logger } from '../utils/Logger';
-import { CommandResult } from '../types';
+import { ConfigManager } from '../config/ConfigManager.js';
+import { GitUtils } from '../utils/GitUtils.js';
+import { Logger } from '../utils/Logger.js';
+import { CommandResult } from '../types/index.js';
 
 /**
  * 快捷指令管理命令类

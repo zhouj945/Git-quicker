@@ -1,7 +1,11 @@
 import inquirer from 'inquirer';
-import { GitUtils } from '../utils/GitUtils';
-import { Logger } from '../utils/Logger';
-import { CommitType, COMMIT_TYPE_DESCRIPTIONS } from '../types';
+import autocompletePrompt from 'inquirer-autocomplete-prompt';
+import { GitUtils } from '../utils/GitUtils.js';
+import { Logger } from '../utils/Logger.js';
+import { CommitType, COMMIT_TYPE_DESCRIPTIONS } from '../types/index.js';
+
+// 注册 autocomplete 插件
+inquirer.registerPrompt('autocomplete', autocompletePrompt);
 
 /**
  * 提交管理命令类
@@ -34,17 +38,28 @@ export class CommitCommand {
         return;
       }
 
-      // 直接显示所有提交类型供选择
+      // 使用 autocomplete 提供可搜索的提交类型选择
+      const commitTypeChoices = Object.values(CommitType).map(type => ({
+        name: `${type} - ${COMMIT_TYPE_DESCRIPTIONS[type]}`,
+        value: type
+      }));
+
       const { commitType } = await inquirer.prompt([{
-        type: 'list',
+        type: 'autocomplete',
         name: 'commitType',
-        message: '选择提交类型:',
-        choices: Object.values(CommitType).map(type => ({
-          name: `${type} - ${COMMIT_TYPE_DESCRIPTIONS[type]}`,
-          value: type
-        })),
-        pageSize: 15,
-        loop: false
+        message: '选择提交类型 (可输入搜索):',
+        source: async (_answersSoFar: any, input: string) => {
+          if (!input) {
+            return commitTypeChoices;
+          }
+          // 过滤匹配的选项
+          const filtered = commitTypeChoices.filter(choice =>
+            choice.name.toLowerCase().includes(input.toLowerCase()) ||
+            choice.value.toLowerCase().includes(input.toLowerCase())
+          );
+          return filtered;
+        },
+        pageSize: 15
       }]);
 
       // 输入提交描述

@@ -1,4 +1,4 @@
-import { GitUtils } from '../utils/GitUtils';
+import { GitUtils } from '../utils/GitUtils.js';
 
 describe('GitUtils', () => {
   describe('isGitRepository', () => {

@@ -1,8 +1,8 @@
 import inquirer from 'inquirer';
 import * as path from 'path';
-import { GitUtils } from '../utils/GitUtils';
-import { Logger } from '../utils/Logger';
-import { WorktreeInfo } from '../types';
+import { GitUtils } from '../utils/GitUtils.js';
+import { Logger } from '../utils/Logger.js';
+import { WorktreeInfo } from '../types/index.js';
 
 /**
  * 工作树管理命令类

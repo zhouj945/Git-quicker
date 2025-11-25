@@ -1,5 +1,5 @@
 import { execSync, spawn } from 'child_process';
-import { BranchInfo, WorktreeInfo, CommandResult } from '../types';
+import { BranchInfo, WorktreeInfo, CommandResult } from '../types/index.js';
 
 /**
  * Git 工具类
