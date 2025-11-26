@@ -1,0 +1,68 @@
+# Source files
+src/
+*.ts
+!*.d.ts
+tsconfig.json
+
+# Tests
+__tests__/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+jest.config.js
+coverage/
+
+# Development files
+.github/
+.vscode/
+.idea/
+*.log
+*.swp
+*.swo
+*~
+
+# Build and dependency directories
+node_modules/
+.npm/
+.cache/
+
+# Version control
+.git/
+.gitignore
+.gitattributes
+
+# CI/CD
+.travis.yml
+.gitlab-ci.yml
+circle.yml
+appveyor.yml
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Scripts (keep only necessary ones)
+scripts/
+
+# Configuration files
+.editorconfig
+.prettierrc
+.prettierignore
+.eslintrc*
+eslint.config.js
+.eslintignore
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Misc
+TODO.md
+CHANGELOG.md

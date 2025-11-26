@@ -26,14 +26,20 @@ jobs:
           node-version: 20
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Verify version matches tag
+        run: |
+          TAG_VERSION=${GITHUB_REF#refs/tags/v}
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          echo "Tag version: v$TAG_VERSION"
+          echo "Package version: $PKG_VERSION"
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "❌ Error: Tag version (v$TAG_VERSION) does not match package.json version ($PKG_VERSION)"
+            exit 1
+          fi
+          echo "✅ Version verification passed"
+
       - name: Install dependencies
         run: npm ci
-
-      - name: Verify eslint installation
-        run: |
-          echo "Checking eslint installation..."
-          ls -la node_modules/.bin/ | grep eslint || echo "eslint not found in node_modules/.bin"
-          npx eslint --version || echo "npx eslint failed"
 
       - name: Lint
         run: npm run lint
@@ -44,9 +50,48 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Verify build outputs
+        run: |
+          echo "Checking build outputs..."
+          if [ ! -d "dist" ]; then
+            echo "❌ Error: dist directory not found"
+            exit 1
+          fi
+          if [ ! -f "dist/cli.js" ]; then
+            echo "❌ Error: dist/cli.js not found"
+            exit 1
+          fi
+          if [ ! -f "dist/index.js" ]; then
+            echo "❌ Error: dist/index.js not found"
+            exit 1
+          fi
+          echo "✅ Build verification passed"
+
+      - name: Test CLI executable
+        run: |
+          node dist/cli.js --version
+
+      - name: Dry run publish
+        run: npm pack --dry-run
+
       - name: Publish to npm
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm publish --access public --provenance
+
+      - name: Verify publication
+        run: |
+          PKG_NAME=$(node -p "require('./package.json').name")
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          echo "Waiting for npm registry to update..."
+          sleep 10
+          PUBLISHED_VERSION=$(npm view $PKG_NAME version 2>/dev/null || echo "not-found")
+          echo "Published version: $PUBLISHED_VERSION"
+          if [ "$PUBLISHED_VERSION" = "$PKG_VERSION" ]; then
+            echo "✅ Package $PKG_NAME@$PKG_VERSION published successfully!"
+          else
+            echo "⚠️ Warning: Published version ($PUBLISHED_VERSION) may not match expected version ($PKG_VERSION)"
+            echo "This might be due to registry propagation delay. Please verify manually."
+          fi
 
 

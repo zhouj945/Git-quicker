@@ -21,11 +21,11 @@
     "lint": "./node_modules/.bin/eslint \"src/**/*.ts\"",
     "lint:fix": "./node_modules/.bin/eslint \"src/**/*.ts\" --fix",
     "prepare": "npm run build",
-    "prepublishOnly": "npm run build && npm test",
+    "prepublishOnly": "test \"$CI\" = \"true\" || (npm run build && npm test)",
     "release:prepare": "./scripts/prepare-release.sh",
-    "release:patch": "npm version patch && git push && git push --tags",
-    "release:minor": "npm version minor && git push && git push --tags",
-    "release:major": "npm version major && git push && git push --tags"
+    "release:patch": "./scripts/release.sh patch",
+    "release:minor": "./scripts/release.sh minor",
+    "release:major": "./scripts/release.sh major"
   },
   "keywords": [
     "git",
