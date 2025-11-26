@@ -1,4 +1,4 @@
-name: Publish to npm on tag
+name: Publish Package
 
 on:
   push:
@@ -6,18 +6,15 @@ on:
       - 'v*'
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
-
-concurrency:
-  group: ${{ github.workflow }}
-  cancel-in-progress: true
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -25,80 +22,74 @@ jobs:
         with:
           node-version: 20
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Upgrade npm
-        run: npm install -g npm@latest
-
-      - name: Clear npm cache
-        run: npm cache clean --force
+          cache: 'npm'
 
       - name: Verify version matches tag
         run: |
           TAG_VERSION=${GITHUB_REF#refs/tags/v}
           PKG_VERSION=$(node -p "require('./package.json').version")
-          echo "Tag version: v$TAG_VERSION"
-          echo "Package version: $PKG_VERSION"
           if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
-            echo "❌ Error: Tag version (v$TAG_VERSION) does not match package.json version ($PKG_VERSION)"
+            echo "Error: Tag version ($TAG_VERSION) does not match package.json version ($PKG_VERSION)"
             exit 1
           fi
-          echo "✅ Version verification passed"
+          echo "Version check passed: v$PKG_VERSION"
 
       - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
         run: |
-          npm ci || npm ci --legacy-peer-deps || npm install
+          npm run lint
+          npm test
 
-      - name: Lint
-        run: npm run lint
-
-      - name: Test
-        run: npm test
-
-      - name: Build
+      - name: Build package
         run: npm run build
 
-      - name: Verify build outputs
+      - name: Verify build
         run: |
-          echo "Checking build outputs..."
-          if [ ! -d "dist" ]; then
-            echo "❌ Error: dist directory not found"
-            exit 1
-          fi
-          if [ ! -f "dist/cli.js" ]; then
-            echo "❌ Error: dist/cli.js not found"
-            exit 1
-          fi
-          if [ ! -f "dist/index.js" ]; then
-            echo "❌ Error: dist/index.js not found"
-            exit 1
-          fi
-          echo "✅ Build verification passed"
-
-      - name: Test CLI executable
-        run: |
+          test -f dist/cli.js || exit 1
+          test -f dist/index.js || exit 1
           node dist/cli.js --version
-
-      - name: Dry run publish
-        run: npm pack --dry-run
 
       - name: Publish to npm
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public --provenance
+        run: npm publish --provenance
 
-      - name: Verify publication
+      - name: Create GitHub Release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const tagName = context.ref.replace('refs/tags/', '');
+            const version = tagName.replace('v', '');
+
+            try {
+              await github.rest.repos.createRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag_name: tagName,
+                name: `Release ${tagName}`,
+                body: `🚀 Published @damon945/git-quicker@${version} to npm\n\nInstall: \`npm install -g @damon945/git-quicker\``,
+                draft: false,
+                prerelease: false
+              });
+              console.log(`GitHub Release created for ${tagName}`);
+            } catch (error) {
+              console.error('Failed to create release:', error.message);
+            }
+
+      - name: Verify npm publication
         run: |
-          PKG_NAME=$(node -p "require('./package.json').name")
-          PKG_VERSION=$(node -p "require('./package.json').version")
           echo "Waiting for npm registry to update..."
-          sleep 10
-          PUBLISHED_VERSION=$(npm view $PKG_NAME version 2>/dev/null || echo "not-found")
-          echo "Published version: $PUBLISHED_VERSION"
+          sleep 15
+          PKG_NAME="@damon945/git-quicker"
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          PUBLISHED_VERSION=$(npm view $PKG_NAME version 2>/dev/null || echo "")
+
           if [ "$PUBLISHED_VERSION" = "$PKG_VERSION" ]; then
-            echo "✅ Package $PKG_NAME@$PKG_VERSION published successfully!"
+            echo "✅ Successfully published $PKG_NAME@$PKG_VERSION"
           else
-            echo "⚠️ Warning: Published version ($PUBLISHED_VERSION) may not match expected version ($PKG_VERSION)"
-            echo "This might be due to registry propagation delay. Please verify manually."
+            echo "⚠️ Published version: $PUBLISHED_VERSION"
+            echo "⚠️ Expected version: $PKG_VERSION"
+            echo "Note: This may be due to registry propagation delay"
           fi
-
-
