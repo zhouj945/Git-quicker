@@ -1,10 +1,11 @@
-# gIt-quicker 🚀
+# Git-Quicker 🚀
 
 一个简化和增强 Git 操作的 TypeScript 命令行工具，让您的 Git 工作流更加高效！
 
-[![npm version](https://badge.fury.io/js/git-quicker.svg)](https://badge.fury.io/js/git-quicker)
+[![npm version](https://img.shields.io/npm/v/@damon945/git-quicker.svg)](https://www.npmjs.com/package/@damon945/git-quicker)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Downloads](https://img.shields.io/npm/dm/@damon945/git-quicker.svg)](https://www.npmjs.com/package/@damon945/git-quicker)
 
 ## ✨ 功能特性
 
@@ -21,10 +22,13 @@
 
 ```bash
 # 全局安装
-npm install -g git-quicker
+npm install -g @damon945/git-quicker
 
 # 或者使用 yarn
-yarn global add git-quicker
+yarn global add @damon945/git-quicker
+
+# 或者使用 pnpm
+pnpm add -g @damon945/git-quicker
 ```
 
 ## 🚀 快速开始
@@ -168,8 +172,8 @@ gq uninstall
 
 ```bash
 # 克隆项目
-git clone <repository-url>
-cd quicker-git
+git clone https://github.com/zhouj945/Git-quicker.git
+cd Git-quicker
 
 # 安装依赖
 npm install
@@ -203,8 +207,14 @@ MIT License - 详见 [LICENSE](./LICENSE) 文件
 
 ## 🙏 致谢
 
-本项目灵感来源于 [git-quicker](https://www.npmjs.com/package/git-quicker)，使用 TypeScript 重新实现并增强了功能。
+本项目使用 TypeScript 实现，旨在为开发者提供更高效的 Git 工作流。
 
 ---
+
+**安装使用：**
+
+```bash
+npm install -g @damon945/git-quicker
+```
 
 让 Git 操作更简单，让开发更高效！ 🎉
